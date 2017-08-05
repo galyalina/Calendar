@@ -1,0 +1,32 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".viewpresenter.calendar.CalendarFragment">
+
+    <com.iotta.calendarseekbar.view.CalendarSeekBar
+        xmlns:swagpoints="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/daysSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:padding="40dp"
+        swagpoints:min="1"
+        swagpoints:max="31"
+        swagpoints:step="1"
+        swagpoints:progressColor="@color/seekbar_progress"
+        swagpoints:progressWidth="12dp"
+        swagpoints:arcColor="@color/seekbar_arc"
+        swagpoints:arcWidth="8dp"
+        swagpoints:textSize="72sp"
+        swagpoints:textColor="@color/seekbar_text"
+        swagpoints:indicatorIcon="@drawable/indicator"
+        />
+
+        <Button
+            android:id="@+id/btnDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"/>
+
+</FrameLayout>
