@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  */
-public class DetailsFragment extends Fragment {
+public class DetailsFragment extends Fragment implements DetailsContract.IView{
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -67,5 +67,10 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void setPresenter(DetailsContract.IPresenter presenter) {
+
     }
 }

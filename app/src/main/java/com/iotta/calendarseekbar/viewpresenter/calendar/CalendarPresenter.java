@@ -4,6 +4,9 @@ import android.support.annotation.NonNull;
 
 import com.iotta.calendarseekbar.model.IMyDaysManager;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by Galina Litkin on 05/08/2017.
  */
@@ -29,4 +32,13 @@ public class CalendarPresenter implements CalendarContract.IPresenter {
 
     }
 
+    @Override
+    public void addDate(Date date) {
+        dataManager.addDate(date);
+    }
+
+    @Override
+    public List<Date> getDates(Date date) {
+        return dataManager.getDates();
+    }
 }

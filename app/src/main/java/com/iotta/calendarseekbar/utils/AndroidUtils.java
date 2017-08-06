@@ -32,6 +32,7 @@ public class AndroidUtils {
                                                  @NonNull Fragment fragment, int frameId) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(frameId, fragment);
+        transaction.addToBackStack(fragment.getClass().getName());
         transaction.commit();
     }
 }

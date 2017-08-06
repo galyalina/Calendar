@@ -26,6 +26,7 @@ public class MyDaysManager implements IMyDaysManager {
         return INSTANCE;
     }
 
+    @Override
     public void addDate(Date date) {
         if (mDates == null) {
             mDates.add(date);
@@ -33,7 +34,7 @@ public class MyDaysManager implements IMyDaysManager {
             mDates = new ArrayList<>();
         }
     }
-
+    @Override
     public List<Date> getDates() {
         return mDates;
     }

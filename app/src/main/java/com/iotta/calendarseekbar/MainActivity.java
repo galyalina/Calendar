@@ -6,9 +6,11 @@ import android.os.Bundle;
 
 import com.iotta.calendarseekbar.utils.AndroidUtils;
 import com.iotta.calendarseekbar.utils.Logger;
+import com.iotta.calendarseekbar.viewpresenter.calendar.CalendarContract;
 import com.iotta.calendarseekbar.viewpresenter.calendar.CalendarFragment;
 import com.iotta.calendarseekbar.viewpresenter.calendar.CalendarPresenter;
 import com.iotta.calendarseekbar.viewpresenter.details.DetailsFragment;
+import com.iotta.calendarseekbar.viewpresenter.details.DetailsPresenter;
 
 public class MainActivity extends AppCompatActivity implements CalendarFragment.OnCalendarInteractionListener {
 
@@ -17,21 +19,27 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (calendarFragment == null) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        if (fragment == null) {
             // Create the fragment
-            calendarFragment = CalendarFragment.newInstance();
-            AndroidUtils.addFragmentToActivity(getSupportFragmentManager(), calendarFragment, R.id.contentFrame);
+            fragment = CalendarFragment.newInstance();
+            AndroidUtils.addFragmentToActivity(getSupportFragmentManager(), fragment, R.id.contentFrame);
         }
 
+        if(fragment.getClass().getName() == CalendarFragment.class.getName()){
+            new CalendarPresenter(Injection.provideDatesData(), (CalendarFragment) fragment);
+            Logger.debug("Calendar Fragment created");
+        }else{
+            new DetailsPresenter(Injection.provideDatesData(), (DetailsFragment) fragment);
+            Logger.debug("Details Fragment created");
+        }
         // Create the presenter
-        new CalendarPresenter(Injection.provideDatesData(), calendarFragment);
-        Logger.debug("Details Fragment created");
     }
 
     @Override
     public void onDetailsPageSelected() {
-        DetailsFragment calendarFragment = DetailsFragment.newInstance();
-        AndroidUtils.replaceFragmentInActivity(getSupportFragmentManager(), calendarFragment, R.id.contentFrame);
+        DetailsFragment detailsFragment = DetailsFragment.newInstance();
+        AndroidUtils.replaceFragmentInActivity(getSupportFragmentManager(), detailsFragment, R.id.contentFrame);
+        new DetailsPresenter(Injection.provideDatesData(), (DetailsFragment) detailsFragment);
     }
 }

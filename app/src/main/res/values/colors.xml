@@ -6,7 +6,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="primaryText">#212121</color>
     <color name="secondaryText">#757575</color>
-
+    <color name="white">#FFFFFFFF</color>
     <color name="seekbar_arc">@color/colorPrimary</color>
     <color name="seekbar_progress">@color/colorAccent</color>
     <color name="seekbar_text">@color/primaryText</color>

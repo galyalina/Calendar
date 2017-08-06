@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -13,10 +12,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.iotta.calendarseekbar.R;
+import com.iotta.calendarseekbar.utils.Logger;
 
 /**
- * Created by Galina Litkin on 05/08/2017.
- * This class is an extension of the SwagPoints project
+ * This class is an extension of the SwagPoints project's class
  * https://github.com/enginebai/SwagPoints
  * Licensed under  Apache License Version 2.0, January 2004
  * http://www.apache.org/licenses/
@@ -65,9 +64,6 @@ public class CalendarSeekBar extends View {
     private boolean mClockwise = true;
     private boolean mEnabled = true;
 
-    //
-    // internal variables
-    //
     /**
      * The counts of point update to determine whether to change previous progress.
      */
@@ -94,12 +90,6 @@ public class CalendarSeekBar extends View {
 
     private float mTextSize = 72;
     private float mTitleTextSize = 8;
-
-    private Paint mTextPaint;
-    private Rect mTextRect = new Rect();
-
-    private Paint mTextTitlePaint;
-    private Rect mTextTitleRect = new Rect();
 
     private int mTranslateX;
     private int mTranslateY;
@@ -164,10 +154,6 @@ public class CalendarSeekBar extends View {
             mArcWidth = (int) a.getDimension(R.styleable.SwagPoints_arcWidth, mArcWidth);
             arcColor = a.getColor(R.styleable.SwagPoints_arcColor, arcColor);
 
-            mTextSize = (int) a.getDimension(R.styleable.SwagPoints_textSize, mTextSize);
-            mTitleTextSize = (int) a.getDimension(R.styleable.SwagPoints_textTitleSize, mTitleTextSize);
-            textColor = a.getColor(R.styleable.SwagPoints_textColor, textColor);
-
             mClockwise = a.getBoolean(R.styleable.SwagPoints_clockwise,
                     mClockwise);
             mEnabled = a.getBoolean(R.styleable.SwagPoints_enabled, mEnabled);
@@ -192,23 +178,11 @@ public class CalendarSeekBar extends View {
         mProgressPaint.setStyle(Paint.Style.STROKE);
         mProgressPaint.setStrokeWidth(mProgressWidth);
 
-        mTextPaint = new Paint();
-        mTextPaint.setColor(textColor);
-        mTextPaint.setAntiAlias(true);
-        mTextPaint.setStyle(Paint.Style.FILL);
-        mTextPaint.setTextSize(mTextSize);
-
-        mTextTitlePaint = new Paint();
-        mTextTitlePaint.setColor(textColor);
-        mTextTitlePaint.setAntiAlias(true);
-        mTextTitlePaint.setStyle(Paint.Style.FILL);
-        mTextTitlePaint.setTextSize(mTitleTextSize);
     }
 
     public void setStep(int step) {
         mStep = step;
     }
-
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -237,26 +211,6 @@ public class CalendarSeekBar extends View {
         }
 
 
-        String textPointTitle = "Month";
-        mTextTitlePaint.getTextBounds(textPointTitle, 0, textPointTitle.length(), mTextTitleRect);
-        float textPointTitleHeights = mTextPaint.descent() + mTextPaint.ascent();
-
-        // center the text
-        int xPosTitle = canvas.getWidth() / 2 - mTextTitleRect.width() / 2;
-        int yPosTitle = (int) ((mArcRect.centerY()) - (textPointTitleHeights / 2));
-
-
-        // draw the text
-        String textPoint = String.valueOf(mPoints);
-        mTextPaint.getTextBounds(textPoint, 0, textPoint.length(), mTextRect);
-        float textPointHeights = mTextPaint.descent() + mTextPaint.ascent();
-
-        int xPosPoint = canvas.getWidth() / 2 - mTextRect.width() / 2;
-        int yPosPoint = (int) ((mArcRect.centerY()) - textPointTitleHeights - (textPointHeights / 2));
-
-        canvas.drawText("January", xPosTitle, yPosTitle, mTextTitlePaint);
-        canvas.drawText(String.valueOf(mPoints), xPosPoint, yPosPoint, mTextPaint);
-
         // draw the arc and progress
         canvas.drawArc(mArcRect, ANGLE_OFFSET, 360, false, mArcPaint);
         canvas.drawArc(mArcRect, ANGLE_OFFSET, mProgressSweep, false, mProgressPaint);
@@ -275,28 +229,37 @@ public class CalendarSeekBar extends View {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if (mOnSwagPointsChangeListener != null)
+                    if (mOnSwagPointsChangeListener != null) {
                         mOnSwagPointsChangeListener.onStartTrackingTouch(this);
+                    }
+                    Logger.debug("MotionEvent.ACTION_DOWN");
                     break;
                 case MotionEvent.ACTION_MOVE:
                     updateOnTouch(event);
+                    Logger.debug("MotionEvent.ACTION_MOVE");
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (mOnSwagPointsChangeListener != null)
+                    if (mOnSwagPointsChangeListener != null) {
                         mOnSwagPointsChangeListener.onStopTrackingTouch(this);
+                    }
+                    updateOnTouch(event);
                     setPressed(false);
                     this.getParent().requestDisallowInterceptTouchEvent(false);
+                    Logger.debug("MotionEvent.ACTION_UP");
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     if (mOnSwagPointsChangeListener != null)
                         mOnSwagPointsChangeListener.onStopTrackingTouch(this);
                     setPressed(false);
                     this.getParent().requestDisallowInterceptTouchEvent(false);
+                    Logger.debug("MotionEvent.ACTION_CANCEL");
                     break;
             }
             return true;
+        }else{
+            Logger.debug("Do nothing view is disabled");
+            return false;
         }
-        return false;
     }
 
     @Override
@@ -322,9 +285,6 @@ public class CalendarSeekBar extends View {
     }
 
 
-
-
-
     private void updateIndicatorIconPosition() {
         int thumbAngle = (int) (mProgressSweep + 90);
         mIndicatorIconX = (int) (mArcRadius * Math.cos(Math.toRadians(thumbAngle)));
@@ -333,20 +293,23 @@ public class CalendarSeekBar extends View {
 
     private void updateProgress(int progress, boolean fromUser) {
 
+        Logger.debug("updateProgress");
+
         // detect points change closed to max or min
         final int maxDetectValue = (int) ((double) mMax * 0.95);
         final int minDetectValue = (int) ((double) mMax * 0.05) + mMin;
 
         mUpdateTimes++;
         if (progress == INVALID_VALUE) {
+            Logger.debug("Some error occurred during update, the value is invalid");
             return;
         }
 
         // avoid accidentally touch to become max from original point
         if (progress > maxDetectValue && mPreviousProgress == INVALID_VALUE) {
+            Logger.debug("Some error occurred during update, the value is invalid");
             return;
         }
-
 
         // record previous and current progress change
         if (mUpdateTimes == 1) {
@@ -375,6 +338,9 @@ public class CalendarSeekBar extends View {
                 if (mOnSwagPointsChangeListener != null) {
                     mOnSwagPointsChangeListener
                             .onPointsChanged(this, progress, fromUser);
+                    Logger.debug("Update Progress:  "+progress);
+                    updateIndicatorIconPosition();
+                    invalidate();
                     return;
                 }
             } else if ((mCurrentProgress >= maxDetectValue
@@ -386,10 +352,12 @@ public class CalendarSeekBar extends View {
                 if (mOnSwagPointsChangeListener != null) {
                     mOnSwagPointsChangeListener
                             .onPointsChanged(this, progress, fromUser);
+                    Logger.debug("Update Progress:  "+progress);
+                    updateIndicatorIconPosition();
+                    invalidate();
                     return;
                 }
             }
-            invalidate();
         } else {
 
             // Detect whether decreasing from max or increasing from min, to unlock the update event.
@@ -414,6 +382,7 @@ public class CalendarSeekBar extends View {
 
                 mOnSwagPointsChangeListener
                         .onPointsChanged(this, progress, fromUser);
+                Logger.debug("Update Progress:  "+progress);
             }
 
             mProgressSweep = (float) progress /  MathHelper.valuePerDegree(mMax);
@@ -444,21 +413,9 @@ public class CalendarSeekBar extends View {
         updateProgress(points, false);
     }
 
-    public int getPoints() {
-        return mPoints;
-    }
-
-    public int getProgressWidth() {
-        return mProgressWidth;
-    }
-
     public void setProgressWidth(int mProgressWidth) {
         this.mProgressWidth = mProgressWidth;
         mProgressPaint.setStrokeWidth(mProgressWidth);
-    }
-
-    public int getArcWidth() {
-        return mArcWidth;
     }
 
     public void setArcWidth(int mArcWidth) {
@@ -470,10 +427,6 @@ public class CalendarSeekBar extends View {
         mClockwise = isClockwise;
     }
 
-    public boolean isClockwise() {
-        return mClockwise;
-    }
-
     public boolean isEnabled() {
         return mEnabled;
     }
@@ -482,37 +435,14 @@ public class CalendarSeekBar extends View {
         this.mEnabled = enabled;
     }
 
-    public int getProgressColor() {
-        return mProgressPaint.getColor();
-    }
-
     public void setProgressColor(int color) {
         mProgressPaint.setColor(color);
         invalidate();
     }
 
-    public int getArcColor() {
-        return mArcPaint.getColor();
-    }
-
     public void setArcColor(int color) {
         mArcPaint.setColor(color);
         invalidate();
-    }
-
-    public void setTextColor(int textColor) {
-        mTextPaint.setColor(textColor);
-        invalidate();
-    }
-
-    public void setTextSize(float textSize) {
-        mTextSize = textSize;
-        mTextPaint.setTextSize(mTextSize);
-        invalidate();
-    }
-
-    public int getMax() {
-        return mMax;
     }
 
     public void setMax(int mMax) {
@@ -523,6 +453,10 @@ public class CalendarSeekBar extends View {
 
     public int getMin() {
         return mMin;
+    }
+
+    public int getPoint(){
+        return mPoints;
     }
 
     public void setMin(int min) {
