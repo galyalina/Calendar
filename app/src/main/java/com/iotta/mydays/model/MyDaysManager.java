@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class MyDaysManager implements IMyDaysManager {
 
+    boolean mFirstLoad = false;
     private DatabaseHandler m_db = null;
     private static MyDaysManager INSTANCE;
     private HashSet<MyDate> mDates;
@@ -45,11 +46,24 @@ public class MyDaysManager implements IMyDaysManager {
 
     @Override
     public List<MyDate> getDates() {
+
+        if(!mFirstLoad) {
+            ArrayList<MyDate> list = m_db.getAllDates();
+
+            if (mDates != null) {
+                for (MyDate data:list) {
+                    mDates.add(data);
+                }
+            }
+            else{
+                mDates = new HashSet<>(list);
+            }
+            mFirstLoad = true;
+            return new ArrayList<MyDate>(mDates);
+        }
+
         if (mDates == null) {
             mDates = new HashSet<>();
-            ArrayList<MyDate> list = m_db.getAllDates();
-            mDates = new HashSet<>(list);
-            return list;
         }
 
         return new ArrayList<MyDate>(mDates);
