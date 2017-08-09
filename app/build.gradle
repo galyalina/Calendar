@@ -10,7 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "App_Log_String", "\"calendarseekbar\""
+        buildConfigField "String", "App_Log_String", "\"log_output_iotta\""
     }
     buildTypes {
         release {
@@ -29,5 +29,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:26.+'
     compile 'com.android.support:recyclerview-v7:26.+'
+    compile 'org.apache.commons:commons-lang3:3.4'
     testCompile 'junit:junit:4.12'
 }

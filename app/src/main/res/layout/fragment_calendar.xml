@@ -1,68 +1,62 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".viewpresenter.calendar.CalendarFragment">
+    android:layout_height="match_parent">
 
-    <com.iotta.calendarseekbar.view.CalendarSeekBar xmlns:swagpoints="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/daysSpinner"
+    <RelativeLayout
+        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="40dp"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        swagpoints:arcColor="@color/seekbar_arc"
-        swagpoints:arcWidth="8dp"
-        swagpoints:indicatorIcon="@drawable/indicator"
-        swagpoints:max="31"
-        swagpoints:min="1"
-        swagpoints:progressColor="@color/seekbar_progress"
-        swagpoints:progressWidth="12dp"
-        swagpoints:step="1"/>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnDetails">
 
-    <ImageButton
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:background="@android:color/transparent"
-        android:layout_marginBottom="40dp"
-        android:src="@drawable/btn_center" />
+        <com.iotta.mydays.viewpresenter.view.CalendarSeekBar xmlns:swagpoints="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/daysSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="30dp"
+            swagpoints:arcColor="@color/seekbar_arc"
+            swagpoints:arcWidth="8dp"
+            swagpoints:indicatorIcon="@drawable/indicator"
+            swagpoints:max="31"
+            swagpoints:min="1"
+            swagpoints:progressColor="@color/seekbar_progress"
+            swagpoints:progressWidth="12dp"
+            swagpoints:step="1" />
 
-    <LinearLayout
-        android:id="@+id/dateLayout"
-        android:layout_marginBottom="40dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/txtMonth"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/dateLayout"
+            android:minHeight="120dp"
+            android:minWidth="120dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="January"
-            android:textColor="@color/white" />
-
-        <TextView
-            android:layout_marginTop="5dp"
-            android:id="@+id/txtDate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="6"
-            android:textColor="@color/white" />
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:addStatesFromChildren="true"
+            android:background="@drawable/btn_center"
+            android:clickable="true">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:focusable="false"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textColor="@color/white" />
+        </FrameLayout>
+
+    </RelativeLayout>
 
     <Button
-        android:textColor="@color/white"
-        android:layout_gravity="bottom"
-        android:background="@color/colorAccent"
         android:id="@+id/btnDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name" />
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/colorAccent"
+        android:text="@string/app_name"
+        android:textColor="@color/white" />
 
-</FrameLayout>
+</RelativeLayout>
